@@ -1,0 +1,8 @@
+%{
+  "elli": {:hex, :elli, "3.3.0", "089218762a7ff3d20ae81c8e911bd0f73ee4ee0ed85454226d1fc6b4fff3b4f6", [:rebar3], [], "hexpm", "698b13b33d05661db9fe7efcba41b84825a379cce86e486cf6aff9285be0ccf8"},
+  "file_system": {:hex, :file_system, "0.2.10", "fb082005a9cd1711c05b5248710f8826b02d7d1784e7c3451f9c1231d4fc162d", [:mix], [], "hexpm", "41195edbfb562a593726eda3b3e8b103a309b733ad25f3d642ba49696bf715dc"},
+  "floki": {:hex, :floki, "0.33.1", "f20f1eb471e726342b45ccb68edb9486729e7df94da403936ea94a794f072781", [:mix], [{:html_entities, "~> 0.5.0", [hex: :html_entities, repo: "hexpm", optional: false]}], "hexpm", "461035fd125f13fdf30f243c85a0b1e50afbec876cbf1ceefe6fddd2e6d712c6"},
+  "html_entities": {:hex, :html_entities, "0.5.2", "9e47e70598da7de2a9ff6af8758399251db6dbb7eebe2b013f2bbd2515895c3c", [:mix], [], "hexpm", "c53ba390403485615623b9531e97696f076ed415e8d8058b1dbaa28181f4fdcc"},
+  "temple": {:hex, :temple, "0.10.0", "774026856141b7466dff21d32cceeb608bde3e5f299682c27c1b3db4a56f4759", [:mix], [{:floki, ">= 0.0.0", [hex: :floki, repo: "hexpm", optional: false]}, {:typed_struct, "~> 0.3", [hex: :typed_struct, repo: "hexpm", optional: false]}], "hexpm", "209dc4f59b010f2a280137de9f5cbcbc1704b501547193c418a683f10fa18ef5"},
+  "typed_struct": {:hex, :typed_struct, "0.3.0", "939789e3c1dca39d7170c87f729127469d1315dcf99fee8e152bb774b17e7ff7", [:mix], [], "hexpm", "c50bd5c3a61fe4e198a8504f939be3d3c85903b382bde4865579bc23111d1b6d"},
+}
