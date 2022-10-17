@@ -31,7 +31,8 @@ defmodule Micro.Handler do
     if maybe_page == nil do
       render_error(404, params)
     else
-      page_content = maybe_page.__micro_page(:render, params)
+      Process.put(:params, params)
+      page_content = maybe_page.__micro_page(:render)
       resp_headers = Process.get(:headers, [])
       {200, resp_headers, page_content}
     end

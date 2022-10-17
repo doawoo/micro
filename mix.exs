@@ -5,6 +5,7 @@ defmodule Micro.MixProject do
     [
       app: :micro,
       releases: releases(),
+      compilers: [:temple] ++ Mix.compilers(),
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,

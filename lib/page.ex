@@ -19,7 +19,9 @@ defmodule Micro.Page do
         Process.put(:headers, new_headers)
       end
 
-      def __micro_page(:render, req) do
+      def params(), do: Process.get(:params, %{})
+
+      def __micro_page(:render) do
         temple do
           unquote(block)
         end
