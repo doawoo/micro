@@ -6,7 +6,6 @@ defmodule Micro.Handler do
   require Logger
 
   def handle(req, _args) do
-    # handle(Request.method(req), Request.path(req), req, args)
     path = Request.path(req)
     params_get = Request.get_args(req)
     params_post = Request.post_args(req)

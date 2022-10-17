@@ -85,7 +85,7 @@ defmodule Micro.PageServer do
     if Path.extname(path) != ".exs" || !File.exists?(path) do
       {:error, state}
     else
-      case Code.eval_file(path) do
+      case catch_eval(path) do
         {{:module, module_name, _module_code, _functions}, []} ->
           Logger.debug("PageServer :: Loaded File :: #{path}")
 
@@ -97,6 +97,16 @@ defmodule Micro.PageServer do
         _ ->
           {:error, state}
       end
+    end
+  end
+
+  defp catch_eval(path) do
+    try do
+      Code.eval_file(path)
+    rescue
+      e ->
+        Logger.error("PageServer :: #{path} :: #{inspect(e)}")
+        :error
     end
   end
 end
