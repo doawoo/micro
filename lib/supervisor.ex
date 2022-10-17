@@ -1,13 +1,19 @@
 defmodule Micro.Supervisor do
   use Supervisor
 
-  def start_link(ref, options) do
-    Supervisor.start_link(__MODULE__, options, name: ref)
+  require Logger
+
+  alias Micro.Options
+
+  def start_link(_, _) do
+    args_parsed = Options.parse(Burrito.Util.Args.get_arguments())
+    options = [callback: Micro.Handler] ++ args_parsed
+    Supervisor.start_link(__MODULE__, options)
   end
 
   def init(options) do
     children = [
-      {Micro.PageServer, []},
+      {Micro.PageServer, options},
       %{id: :elli, start: {:elli, :start_link, [options]}}
     ]
 

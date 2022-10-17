@@ -3,20 +3,24 @@ defmodule Micro.PageServer do
 
   require Logger
 
-  @spec start_link(term()) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(_options) do
-    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+  @default_pages_dir "./pages"
+
+  @spec start_link(Keyword.t()) :: :ignore | {:error, any} | {:ok, pid}
+  def start_link(options) do
+    GenServer.start_link(__MODULE__, options, name: __MODULE__)
   end
 
   @impl GenServer
-  def init(_) do
-    Logger.debug("PageServer :: init")
+  def init(options) do
+    Logger.debug("PageServer :: init :: #{inspect(options)}")
+
+    pages_dir = Keyword.get(options, :dir, @default_pages_dir)
 
     # Listen for file changes
-    {:ok, pid} = FileSystem.start_link(dirs: ["./pages"])
+    {:ok, pid} = FileSystem.start_link(dirs: [pages_dir])
     FileSystem.subscribe(pid)
 
-    init_state = load_all_pages()
+    init_state = load_all_pages(pages_dir)
 
     {:ok, init_state}
   end
@@ -28,7 +32,7 @@ defmodule Micro.PageServer do
   end
 
   def handle_call({:get_page, segments}, _from, state) do
-    maybe_page = Map.get(state, segments)
+    maybe_page = Map.get(state.pages, segments)
     {:reply, maybe_page, state}
   end
 
@@ -53,9 +57,9 @@ defmodule Micro.PageServer do
 
   #### Private Helper Functions
 
-  defp load_all_pages() do
-    ls_r("./pages")
-    |> Enum.reduce(%{}, fn path, acc ->
+  defp load_all_pages(directory) do
+    ls_r(directory)
+    |> Enum.reduce(%{pages: %{}, dir: directory}, fn path, acc ->
       {_res, new_acc} = do_load_page(path, acc)
       new_acc
     end)
@@ -83,10 +87,11 @@ defmodule Micro.PageServer do
     else
       case Code.eval_file(path) do
         {{:module, module_name, _module_code, _functions}, []} ->
-          Logger.debug("Loaded file: #{path}")
+          Logger.debug("PageServer :: Loaded File :: #{path}")
 
           clean_path = module_name.__micro_page(:path)
-          new_state = Map.put_new(state, clean_path, module_name)
+          new_pages = Map.put_new(state.pages, clean_path, module_name)
+          new_state = %{state | pages: new_pages}
           {:ok, new_state}
 
         _ ->
