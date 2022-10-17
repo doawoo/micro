@@ -13,6 +13,12 @@ defmodule Micro.Page do
         Micro.Page.compute_path(__MODULE__)
       end
 
+      def put_resp_header(name, value) when is_binary(name) and is_binary(value) do
+        existing_headers = Process.get(:headers, [])
+        new_headers = [ {name, value} | existing_headers]
+        Process.put(:headers, new_headers)
+      end
+
       def __micro_page(:render, req) do
         temple do
           unquote(block)

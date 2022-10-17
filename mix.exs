@@ -27,6 +27,7 @@ defmodule Micro.MixProject do
       {:temple, "~> 0.10.0"},
       {:file_system, "~> 0.2.10"},
       {:jason, "~> 1.4"},
+      {:mime, "~> 2.0"},
       {:burrito, git: "https://github.com/burrito-elixir/burrito"}
     ]
   end

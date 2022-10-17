@@ -14,6 +14,7 @@ defmodule Micro.Supervisor do
   def init(options) do
     children = [
       {Micro.PageServer, options},
+      {Micro.AssetsServer, options},
       %{id: :elli, start: {:elli, :start_link, [options]}}
     ]
 

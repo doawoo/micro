@@ -3,7 +3,7 @@ defmodule Micro.PageServer do
 
   require Logger
 
-  @default_pages_dir "./pages"
+  def default_pages_dir, do: "./pages"
 
   @spec start_link(Keyword.t()) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(options) do
@@ -14,7 +14,7 @@ defmodule Micro.PageServer do
   def init(options) do
     Logger.debug("PageServer :: init :: #{inspect(options)}")
 
-    pages_dir = Keyword.get(options, :dir, @default_pages_dir)
+    pages_dir = Keyword.get(options, :dir, default_pages_dir())
 
     # Listen for file changes
     {:ok, pid} = FileSystem.start_link(dirs: [pages_dir])
