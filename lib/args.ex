@@ -1,8 +1,7 @@
-defmodule Micro.Options do
+defmodule Micro.Args do
   require Logger
 
   @options [
-    dir: :string,
     port: :integer
   ]
 
@@ -13,18 +12,15 @@ defmodule Micro.Options do
 
       [
         port: Keyword.get(parsed, :port, default_port()),
-        dir: Keyword.get(parsed, :dir, default_dir())
       ]
     else
       [
         port: default_port(),
-        dir: default_dir()
       ]
     end
   end
 
   defp started_in_burrito?(args), do: match?(["--no-halt", "--", "start" | _args], args)
 
-  defp default_dir, do: File.cwd!() |> Path.join(["pages"])
   defp default_port, do: 3000
 end

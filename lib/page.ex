@@ -10,7 +10,7 @@ defmodule Micro.Page do
   defmacro page(do: block) do
     quote do
       def __micro_page(:path) do
-        Micro.Page.compute_path(__MODULE__)
+        Micro.Page.compute_path(__ENV__)
       end
 
       def put_resp_header(name, value) when is_binary(name) and is_binary(value) do
@@ -30,10 +30,6 @@ defmodule Micro.Page do
   end
 
   def compute_path(caller) do
-    ["Micro", "Pages" | rest_path] = Module.split(caller)
-    cased = Enum.map(rest_path, &Macro.underscore/1)
-    Enum.filter(cased, fn item ->
-      item != "index"
-    end)
+    caller.file
   end
 end

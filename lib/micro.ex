@@ -1,11 +1,22 @@
 defmodule Micro do
   use Application
 
-  @spec start(term(), term()) :: {:ok, pid}
-  def start(_, _) do
-    Micro.Supervisor.start_link(__MODULE__, [])
-  end
+  require Logger
 
-  def get_error_page(404), do: Micro.Pages.Errors.NotFound
-  def get_error_page(500), do: Micro.Pages.Errors.InternalServerError
+  @impl Application
+  def start(_, _) do
+    args_parsed = Micro.Args.parse(Burrito.Util.Args.get_arguments())
+    options = [callback: Micro.Handler] ++ args_parsed
+
+    Logger.debug("Micro :: init :: #{inspect(options)}")
+
+    children = [
+      {Micro.Supervisor, []},
+      Registry.child_spec(keys: :unique, name: Micro.PageServerRegistry),
+      %{id: :elli, start: {:elli, :start_link, [options]}}
+    ]
+
+    opts = [strategy: :one_for_one, name: __MODULE__]
+    Supervisor.start_link(children, opts)
+  end
 end
